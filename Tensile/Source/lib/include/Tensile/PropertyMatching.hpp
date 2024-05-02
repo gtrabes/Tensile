@@ -142,7 +142,7 @@ namespace Tensile
                 return findBestKeyMatch(
                     ProblemKey::keyForProblem<Key, Object>(object, this->properties), transform);
             }
-
+/*
             virtual ReturnValue findBestEvaluationSolution(Object const&   object,
                                                            Hardware const& hardware,
                                                            Transform       transform) const override
@@ -220,6 +220,56 @@ namespace Tensile
                 }
 
                 return bestMatch;
+            }
+*/
+            virtual ReturnValue findBestEvaluationSolution(Object const& object,
+                                                           Hardware const& hardware,
+                                                           Transform transform) const override
+            {
+                double bestPerformance = std::numeric_limits<double>::max();
+                ReturnValue kernel = this->nullValue;
+
+                for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
+                {
+                    ReturnValue currentKernel = transform(iter->value);
+
+                    if (currentKernel != nullptr && currentKernel->canSolve(object, hardware))
+                    {
+                        size_t model_M = iter->key[0];
+                        size_t model_N = iter->key[1];
+                        size_t model_K = 1;
+                        size_t model_NumBatches = 1;
+
+                    if (iter->key.size() > 3)
+                    {
+                        model_K = iter->key[3];
+                        model_NumBatches = iter->key[2];
+                    }
+                    else
+                    {
+                        model_K = iter->key[2];
+                    }
+                        /*double currentPerformance = currentkernel->computeTAMScore(object,
+                                                                   hardware,
+                                                                   static_cast<double>(model_M),
+                                                                   static_cast<double>(model_N),
+                                                                   static_cast<double>(model_K),
+                                                                   static_cast<double>(model_NumBatches));
+                        */
+                        double currentPerformance = currentKernel->projectPerformance(object,
+                                                                                      hardware,
+                                                                                      static_cast<double>(model_M),
+                                                                                      static_cast<double>(model_N),
+                                                                                      static_cast<double>(model_K),
+                                                                                      static_cast<double>(model_NumBatches));)                       
+                        if (currentPerformance < bestPerformance)
+                        {
+                            bestKernel = currentKernel;
+                            bestPerformance = currentPerformance;
+                        }
+                    }
+                }
+                return bestKernel;
             }
 
             virtual std::vector<Value> matchesInOrder(Object const& object) const override
