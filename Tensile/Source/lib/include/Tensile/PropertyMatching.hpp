@@ -256,12 +256,12 @@ namespace Tensile
                                                                    static_cast<double>(model_K),
                                                                    static_cast<double>(model_NumBatches));
                         */
-                        double currentPerformance = currentKernel->projectPerformance(object,
+                        double currentPerformance = currentKernel->projectedPerformance(object,
                                                                                       hardware,
                                                                                       static_cast<double>(model_M),
                                                                                       static_cast<double>(model_N),
                                                                                       static_cast<double>(model_K),
-                                                                                      static_cast<double>(model_NumBatches));)                       
+                                                                                      static_cast<double>(model_NumBatches));                       
                         if (currentPerformance < bestPerformance)
                         {
                             bestKernel = currentKernel;
