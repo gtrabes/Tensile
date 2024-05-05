@@ -227,7 +227,7 @@ namespace Tensile
                                                            Transform transform) const override
             {
                 double bestGranularityLoss = 0;
-                ReturnValue kernel = this->nullValue;
+                ReturnValue bestKernel = this->nullValue;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
@@ -249,14 +249,14 @@ namespace Tensile
                         {
                             K = iter->key[2];
                         }
-                        /*double currentPerformance = currentkernel->computeTAMScore(object,
+                        /*
+                        double currentPerformance = currentkernel->computeTAMScore(object,
                                                                    hardware,
                                                                    static_cast<double>(model_M),
                                                                    static_cast<double>(model_N),
                                                                    static_cast<double>(model_K),
                                                                    static_cast<double>(model_NumBatches));
                         */
-                       
                         double currentGranularityLoss = currentKernel->GranularityLoss(object,
                                                                                       hardware,
                                                                                       static_cast<double>(M),
