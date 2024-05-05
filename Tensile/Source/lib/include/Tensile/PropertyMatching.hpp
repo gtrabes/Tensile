@@ -255,8 +255,8 @@ namespace Tensile
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
-                bestKernel = findLowerEuclidenDistance(bestKernelVector);
-
+                //bestKernel = findLowerEuclidenDistance(bestKernelVector);
+                bestKernel = bestKernelVector.back();
                 return bestKernel;
             }
 
@@ -331,7 +331,7 @@ namespace Tensile
                 return std::make_tuple(bestMatch, bestDistance);
             }
         */
-       
+
             virtual std::vector<Value> matchesInOrder(Object const& object) const override
             {
                 return keyMatchesInOrder(
