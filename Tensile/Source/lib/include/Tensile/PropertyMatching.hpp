@@ -260,6 +260,7 @@ namespace Tensile
                 return bestKernel;
             }
 
+            /*
             ReturnValue findLowerEuclidenDistance(Key const& key,
                                                                          Transform  transform) const
             {
@@ -329,10 +330,8 @@ namespace Tensile
 
                 return std::make_tuple(bestMatch, bestDistance);
             }
-        };
-
-
-
+        */
+       
             virtual std::vector<Value> matchesInOrder(Object const& object) const override
             {
                 return keyMatchesInOrder(
