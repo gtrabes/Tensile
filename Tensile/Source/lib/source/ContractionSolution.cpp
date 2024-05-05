@@ -1792,7 +1792,7 @@ namespace Tensile
     }
 
 // Modified Projected Performance
-    double ContractionSolution::projectedPerformance(Problem const&  problem,
+    double ContractionSolution::GranularityLoss(Problem const&  problem,
                                                   Hardware const& hardware,
                                                   double          M,
                                                   double          N,
