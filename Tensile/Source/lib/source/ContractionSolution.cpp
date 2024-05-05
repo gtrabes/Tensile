@@ -1791,10 +1791,8 @@ namespace Tensile
         return pp;
     }
 
-
 // Modified Projected Performance
-    ContractionSolution::ProjectedPerformance
-        ContractionSolution::projectedPerformance(Problem const&  problem,
+    double ContractionSolution::projectedPerformance(Problem const&  problem,
                                                   Hardware const& hardware,
                                                   double          M,
                                                   double          N,
@@ -1802,69 +1800,8 @@ namespace Tensile
                                                   double          NumBatches) const
     {
         ProjectedPerformance pp;
-
-        double M = 1.0, N = 1.0;
-        if(problem.freeIndicesA().size() > 1 || sizeMapping.packBatchDims & 0x1)
-        {
-            std::vector<size_t> packedIndices
-                = generatePackedIndicesA(problem, sizeMapping.packBatchDims);
-            for(auto pi = packedIndices.begin(); pi != packedIndices.end(); pi++)
-                M *= problem.a().sizes()[*pi];
-        }
-        else
-            M = problem.freeSizeA(0);
-
-        if(problem.freeIndicesB().size() > 1 || sizeMapping.packBatchDims & 0x2)
-        {
-            std::vector<size_t> packedIndices
-                = generatePackedIndicesB(problem, sizeMapping.packBatchDims);
-            for(auto pi = packedIndices.begin(); pi != packedIndices.end(); pi++)
-                N *= problem.b().sizes()[*pi];
-        }
-        else
-            N = problem.freeSizeB(0);
-
-        double NumBatches = 1;
-        if(sizeMapping.packBatchDims == 0)
-        {
-            for(size_t i = 0; i < problem.batchIndices().size(); i++)
-                NumBatches *= problem.batchSize(i);
-        }
-        double K = problem.boundSize(0); // TODO - fix for multiple summations
-
         pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
-
-        auto it = ideals.begin();
-
-        int    closestKMeasure     = std::numeric_limits<int>::max();
-        double closestKPerformance = 0.0;
-
-        while(it != ideals.end())
-        {
-            int myK       = it->first;
-            int myMeasure = std::abs(myK - K);
-            if(myMeasure < closestKMeasure)
-            {
-                closestKMeasure     = myMeasure;
-                closestKPerformance = it->second;
-            }
-            it++;
-        }
-
-        double MT0    = pp.granularities.MT0;
-        double MT1    = pp.granularities.MT1;
-        double NumCUs = pp.granularities.CUs;
-
-        double GlobalSplitU         = pp.granularities.GSU;
-        double IdealGranularityPerf = closestKPerformance;
-
-        pp.staticModel = staticPerformanceModel(
-            M, N, K, NumBatches, MT0, MT1, NumCUs, pp.granularities.totalGranularity, GlobalSplitU);
-
-        pp.speedGFlops = IdealGranularityPerf * pp.granularities.totalGranularity;
-        pp.CUs         = NumCUs;
-
-        return pp;
+        return pp.natCuGranularity;
     }
 
     ContractionSolution::TAMetricProblemScore ContractionSolution::computeProblemScore(
