@@ -228,6 +228,8 @@ namespace Tensile
             {
                 double bestGranularityLoss = 0;
                 ReturnValue bestKernel = this->nullValue;
+                // Create a vector to hold objects of type ReturnValue
+                std::vector<ReturnValue> bestKernelVector;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
@@ -235,44 +237,101 @@ namespace Tensile
 
                     if (currentKernel != nullptr && currentKernel->canSolve(object, hardware))
                     {
-                        size_t M = iter->key[0];
-                        size_t N = iter->key[1];
-                        size_t K = 1;
-                        size_t NumBatches = 1;
-
-                        if (iter->key.size() > 3)
-                        {
-                            K = iter->key[3];
-                            NumBatches = iter->key[2];
-                        }
-                        else
-                        {
-                            K = iter->key[2];
-                        }
-                        /*
-                        double currentPerformance = currentkernel->computeTAMScore(object,
-                                                                   hardware,
-                                                                   static_cast<double>(model_M),
-                                                                   static_cast<double>(model_N),
-                                                                   static_cast<double>(model_K),
-                                                                   static_cast<double>(model_NumBatches));
-                        */
                         double currentGranularityLoss = currentKernel->GranularityLoss(object,
-                                                                                      hardware,
-                                                                                      static_cast<double>(M),
-                                                                                      static_cast<double>(N),
-                                                                                      static_cast<double>(K),
-                                                                                      static_cast<double>(NumBatches));
+                                                                                      hardware);
                                                                                                              
                         if (currentGranularityLoss > bestGranularityLoss)
                         {
-                            bestKernel = currentKernel;
+                            bestKernelVector.clear();
+                            bestKernelVector.push_back(currentKernel);
                             bestGranularityLoss = currentGranularityLoss;
                         }
+                        else if (currentGranularityLoss == bestGranularityLoss){
+                            bestKernelVector.push_back(currentKernel);
+                            bestGranularityLoss = currentGranularityLoss;
+                        }
+                        
+                        
                     }
                 }
+                //get kernel that worked with GEMM with lowest euclidean distance
+                bestKernel = findLowerEuclidenDistance(bestKernelVector);
+
                 return bestKernel;
             }
+
+            ReturnValue findLowerEuclidenDistance(Key const& key,
+                                                                         Transform  transform) const
+            {
+                double bestDistance = std::numeric_limits<double>::max();
+
+                auto iter = this->table.begin();
+                if(iter == this->table.end())
+                    return std::make_tuple(this->nullValue, bestDistance);
+
+                ReturnValue bestMatch = transform(iter->value);
+
+                if(bestMatch)
+                    bestDistance = distance(key, iter->key);
+
+                if(T_Debug)
+                {
+                    std::cout << "Key: ";
+                    streamJoin(std::cout, key, ", ");
+                    std::cout << std::endl;
+
+                    streamJoin(std::cout, iter->key, ", ");
+
+                    std::cout << ": " << bestDistance << " <-- First" << std::endl;
+                }
+
+                iter++;
+
+                while(iter != this->table.end())
+                {
+                    auto myDistance = distance(key, iter->key);
+                    bool thisMatch  = false;
+
+                    if(myDistance < bestDistance)
+                    {
+                        auto myMatch = transform(iter->value);
+
+                        if(myMatch)
+                        {
+                            bestDistance = myDistance;
+                            bestMatch    = myMatch;
+                            thisMatch    = true;
+                        }
+                    }
+
+                    if(T_Debug)
+                    {
+                        streamJoin(std::cout, iter->key, ", ");
+                        std::cout << ": " << myDistance;
+                        if(myDistance < bestDistance)
+                        {
+                            std::cout << " <-- Best so far";
+
+                            if(thisMatch)
+                                std::cout << " (has a matching solution)";
+                            else
+                                std::cout << " (no match)";
+                        }
+
+                        std::cout << std::endl;
+                    }
+
+                    iter++;
+                }
+
+                if(T_Debug && bestMatch)
+                    std::cout << "Solution index selected: " << bestMatch->index << std::endl;
+
+                return std::make_tuple(bestMatch, bestDistance);
+            }
+        };
+
+
 
             virtual std::vector<Value> matchesInOrder(Object const& object) const override
             {
