@@ -235,6 +235,13 @@ namespace Tensile
                                double          model_K,
                                double          model_NumBatches) const;
 
+        double GranularityLoss(Problem const&  problem,
+                               Hardware const& hardware,
+                               double          model_M,
+                               double          model_N,
+                               double          model_K,
+                               double          model_NumBatches) const;
+
         /**
    * Calculate the projected performance based on granularity loss.
    */
