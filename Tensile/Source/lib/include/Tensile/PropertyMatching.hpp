@@ -226,7 +226,7 @@ namespace Tensile
                                                            Hardware const& hardware,
                                                            Transform transform) const override
             {
-                double bestPerformance = std::numeric_limits<double>::max();
+                double bestGranularityLoss = 0;
                 ReturnValue kernel = this->nullValue;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
@@ -235,20 +235,20 @@ namespace Tensile
 
                     if (currentKernel != nullptr && currentKernel->canSolve(object, hardware))
                     {
-                        size_t model_M = iter->key[0];
-                        size_t model_N = iter->key[1];
-                        size_t model_K = 1;
-                        size_t model_NumBatches = 1;
+                        size_t M = iter->key[0];
+                        size_t N = iter->key[1];
+                        size_t K = 1;
+                        size_t NumBatches = 1;
 
-                    if (iter->key.size() > 3)
-                    {
-                        model_K = iter->key[3];
-                        model_NumBatches = iter->key[2];
-                    }
-                    else
-                    {
-                        model_K = iter->key[2];
-                    }
+                        if (iter->key.size() > 3)
+                        {
+                            K = iter->key[3];
+                            NumBatches = iter->key[2];
+                        }
+                        else
+                        {
+                            K = iter->key[2];
+                        }
                         /*double currentPerformance = currentkernel->computeTAMScore(object,
                                                                    hardware,
                                                                    static_cast<double>(model_M),
@@ -256,16 +256,18 @@ namespace Tensile
                                                                    static_cast<double>(model_K),
                                                                    static_cast<double>(model_NumBatches));
                         */
-                        double currentPerformance = currentKernel->projectedPerformance(object,
+                       
+                        double currentGranularityLoss = currentKernel->GranularityLoss(object,
                                                                                       hardware,
-                                                                                      static_cast<double>(model_M),
-                                                                                      static_cast<double>(model_N),
-                                                                                      static_cast<double>(model_K),
-                                                                                      static_cast<double>(model_NumBatches));                       
-                        if (currentPerformance < bestPerformance)
+                                                                                      static_cast<double>(M),
+                                                                                      static_cast<double>(N),
+                                                                                      static_cast<double>(K),
+                                                                                      static_cast<double>(NumBatches));
+                                                                                                             
+                        if (currentGranularityLoss > bestGranularityLoss)
                         {
                             bestKernel = currentKernel;
-                            bestPerformance = currentPerformance;
+                            bestGranularityLoss = currentGranularityLoss;
                         }
                     }
                 }
