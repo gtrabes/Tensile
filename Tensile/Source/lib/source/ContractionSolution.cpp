@@ -1829,7 +1829,7 @@ namespace Tensile
         
         AMDGPU const* pAMDGPU = dynamic_cast<AMDGPU const*>(&hardware);
         assert(pAMDGPU);
-        double NumCUs = pAMDGPU->computeUnitCount;
+        int NumCUs = pAMDGPU->computeUnitCount;
 
         int TotalTiles = (M / MT0) * (N / MT1);
         int remainder = TotalTiles % NumCUs;
