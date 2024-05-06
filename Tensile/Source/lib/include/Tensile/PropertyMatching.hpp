@@ -226,7 +226,7 @@ namespace Tensile
                                                            Hardware const& hardware,
                                                            Transform transform) const override
             {
-                double bestGranularityLoss = 0;
+                double bestGranularityLoss = std::numeric_limits<double>::max();
                 ReturnValue bestKernel = this->nullValue;
                 // Create a vector to hold objects of type ReturnValue
                 std::vector<ReturnValue> bestKernelVector;
@@ -240,7 +240,7 @@ namespace Tensile
                         double currentGranularityLoss = currentKernel->GranularityLoss(object,
                                                                                       hardware);
                                                                                                              
-                        if (currentGranularityLoss > bestGranularityLoss)
+                        if (currentGranularityLoss < bestGranularityLoss)
                         {
                             //bestKernelVector.clear();
                             //bestKernelVector.push_back(currentKernel);

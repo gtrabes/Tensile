@@ -1824,9 +1824,20 @@ namespace Tensile
         }
         double K = problem.boundSize(0); // TODO - fix for multiple summations
 
-        ProjectedPerformance pp;
-        pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
-        return pp.granularities.TotalGranularity;
+        double MT0 = sizeMapping.macroTile.x;
+        double MT1 = sizeMapping.macroTile.y;
+        
+        AMDGPU const* pAMDGPU = dynamic_cast<AMDGPU const*>(&hardware);
+        assert(pAMDGPU);
+        double NumCUs        = pAMDGPU->computeUnitCount;
+
+        int TotalTiles = (M / MT0) * (N / MT1);
+        int remainder = TotalTiles % num_CUs;
+        return remainder;
+            
+        //ProjectedPerformance pp;
+        //pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
+        //return pp.granularities.natCuGranularity;
     }
 
     ContractionSolution::TAMetricProblemScore ContractionSolution::computeProblemScore(
