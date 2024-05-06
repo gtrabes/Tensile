@@ -1829,12 +1829,12 @@ namespace Tensile
         
         AMDGPU const* pAMDGPU = dynamic_cast<AMDGPU const*>(&hardware);
         assert(pAMDGPU);
-        double NumCUs        = pAMDGPU->computeUnitCount;
+        double NumCUs = pAMDGPU->computeUnitCount;
 
         int TotalTiles = (M / MT0) * (N / MT1);
-        int remainder = TotalTiles % num_CUs;
+        int remainder = TotalTiles % NumCUs;
         return remainder;
-            
+
         //ProjectedPerformance pp;
         //pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
         //return pp.granularities.natCuGranularity;
