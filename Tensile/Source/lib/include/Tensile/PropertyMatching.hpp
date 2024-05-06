@@ -242,21 +242,19 @@ namespace Tensile
                                                                                                              
                         if (currentGranularityLoss < bestGranularityLoss)
                         {
-                            //bestKernelVector.clear();
-                            //bestKernelVector.push_back(currentKernel);
-                            bestKernel = currentKernel;
-                            bestGranularityLoss = currentGranularityLoss;
+                            bestKernelVector.clear();
+                            bestKernelVector.push_back(currentKernel);
+                            //bestKernel = currentKernel;
+                            //bestGranularityLoss = currentGranularityLoss;
                         }
-                        //else if (currentGranularityLoss == bestGranularityLoss){
-                        //    bestKernelVector.push_back(currentKernel);
-                        //}
-                        
-                        
+                        else if (currentGranularityLoss == bestGranularityLoss){
+                            bestKernelVector.push_back(currentKernel);
+                        }                        
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
                 //bestKernel = findLowerEuclidenDistance(bestKernelVector);
-                //bestKernel = bestKernelVector[0];
+                bestKernel = bestKernelVector.back();
                 return bestKernel;
             }
 
