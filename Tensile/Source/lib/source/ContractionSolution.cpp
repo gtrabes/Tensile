@@ -1826,7 +1826,7 @@ namespace Tensile
 
         ProjectedPerformance pp;
         pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
-        return pp.granularities.natCuGranularity;
+        return pp.granularities.TotalGranularity;
     }
 
     ContractionSolution::TAMetricProblemScore ContractionSolution::computeProblemScore(
