@@ -294,29 +294,9 @@ namespace Tensile
                         }
                     }
 
-                    if(T_Debug)
-                    {
-                        streamJoin(std::cout, iter->key, ", ");
-                        std::cout << ": " << myDistance;
-                        if(myDistance < bestDistance)
-                        {
-                            std::cout << " <-- Best so far";
-
-                            if(thisMatch)
-                                std::cout << " (has a matching solution)";
-                            else
-                                std::cout << " (no match)";
-                        }
-
-                        std::cout << std::endl;
-                    }
-
                     iter++;
                 }
-
-                if(T_Debug && bestMatch)
-                    std::cout << "Solution index selected: " << bestMatch->index << std::endl;
-
+                
                 //return std::make_tuple(bestMatch, bestDistance);
                 return bestMatch;
             }
