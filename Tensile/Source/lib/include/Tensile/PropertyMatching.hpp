@@ -243,47 +243,37 @@ namespace Tensile
                                                                                                              
                         if (currentGranularityLoss > bestGranularityLoss)
                         {
-                            //bestKernelVector.clear();
-                            //bestKernelVector.push_back(currentKernel);
-                            bestKernel = currentKernel;
-                            bestGranularityLoss = currentGranularityLoss;
+                            bestKernelVector.clear();
+                            bestKernelVector.push_back(currentKernel);
+                            //bestKernel = currentKernel;
+                            //bestGranularityLoss = currentGranularityLoss;
                         }
-                        //else if (currentGranularityLoss == bestGranularityLoss){
-                        //    bestKernelVector.push_back(currentKernel);
-                        //}                        
+                        else if (currentGranularityLoss == bestGranularityLoss){
+                            bestKernelVector.push_back(currentKernel);
+                        }                        
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
-                //bestKernel = findLowerEuclidenDistance(bestKernelVector);
+                bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
                 //bestKernel = bestKernelVector.back();
                 return bestKernel;
             }
 
-            /*
-            ReturnValue findLowerEuclidenDistance(Key const& key,
-                                                                         Transform  transform) const
+            ReturnValue findLowerEuclidenDistance(Object const& object,
+                                                  std::vector<ReturnValue> bestKernelVector,
+                                                  Transform  transform) const
             {
                 double bestDistance = std::numeric_limits<double>::max();
+                Key key = object.key();
 
                 auto iter = this->table.begin();
                 if(iter == this->table.end())
-                    return std::make_tuple(this->nullValue, bestDistance);
+                    return bestDistance;
 
                 ReturnValue bestMatch = transform(iter->value);
 
                 if(bestMatch)
                     bestDistance = distance(key, iter->key);
-
-                if(T_Debug)
-                {
-                    std::cout << "Key: ";
-                    streamJoin(std::cout, key, ", ");
-                    std::cout << std::endl;
-
-                    streamJoin(std::cout, iter->key, ", ");
-
-                    std::cout << ": " << bestDistance << " <-- First" << std::endl;
-                }
 
                 iter++;
 
@@ -327,9 +317,9 @@ namespace Tensile
                 if(T_Debug && bestMatch)
                     std::cout << "Solution index selected: " << bestMatch->index << std::endl;
 
-                return std::make_tuple(bestMatch, bestDistance);
+                //return std::make_tuple(bestMatch, bestDistance);
+                return bestMatch;
             }
-        */
 
             virtual std::vector<Value> matchesInOrder(Object const& object) const override
             {
