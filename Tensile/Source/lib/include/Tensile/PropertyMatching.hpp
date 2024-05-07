@@ -265,10 +265,11 @@ namespace Tensile
             {
                 double bestDistance = std::numeric_limits<double>::max();
                 Key key = ProblemKey::keyForProblem<Key, Object>(object, this->properties);
+                ReturnValue bestMatch;
 
                 auto iter = this->table.begin();
                 if(iter == this->table.end())
-                    return bestDistance;
+                    return bestMatch;
 
                 ReturnValue bestMatch = transform(iter->value);
 
