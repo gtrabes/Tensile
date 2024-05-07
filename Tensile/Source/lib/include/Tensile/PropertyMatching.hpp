@@ -226,7 +226,8 @@ namespace Tensile
                                                            Hardware const& hardware,
                                                            Transform transform) const override
             {
-                double bestGranularityLoss = std::numeric_limits<double>::max();
+                //double bestGranularityLoss = std::numeric_limits<double>::max();
+                double bestGranularityLoss = 0;
                 ReturnValue bestKernel = this->nullValue;
                 // Create a vector to hold objects of type ReturnValue
                 std::vector<ReturnValue> bestKernelVector;
@@ -240,21 +241,21 @@ namespace Tensile
                         double currentGranularityLoss = currentKernel->GranularityLoss(object,
                                                                                       hardware);
                                                                                                              
-                        if (currentGranularityLoss < bestGranularityLoss)
+                        if (currentGranularityLoss > bestGranularityLoss)
                         {
-                            bestKernelVector.clear();
-                            bestKernelVector.push_back(currentKernel);
-                            //bestKernel = currentKernel;
-                            //bestGranularityLoss = currentGranularityLoss;
+                            //bestKernelVector.clear();
+                            //bestKernelVector.push_back(currentKernel);
+                            bestKernel = currentKernel;
+                            bestGranularityLoss = currentGranularityLoss;
                         }
-                        else if (currentGranularityLoss == bestGranularityLoss){
-                            bestKernelVector.push_back(currentKernel);
-                        }                        
+                        //else if (currentGranularityLoss == bestGranularityLoss){
+                        //    bestKernelVector.push_back(currentKernel);
+                        //}                        
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
                 //bestKernel = findLowerEuclidenDistance(bestKernelVector);
-                bestKernel = bestKernelVector.back();
+                //bestKernel = bestKernelVector.back();
                 return bestKernel;
             }
 

@@ -1833,7 +1833,8 @@ namespace Tensile
 
         int TotalTiles = (M / MT0) * (N / MT1);
         int remainder = TotalTiles % NumCUs;
-        return remainder;
+        double granularity_loss = 1 - ((double)remainder / NumCUs);
+        return granularity_loss;
 
         //ProjectedPerformance pp;
         //pp.granularities = ContractionSolution::computeGranularities(hardware, M, N, K, NumBatches);
