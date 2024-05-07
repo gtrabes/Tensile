@@ -264,7 +264,7 @@ namespace Tensile
                                                   Transform  transform) const
             {
                 double bestDistance = std::numeric_limits<double>::max();
-                Key key = object.key();
+                Key key = ProblemKey::keyForProblem<Key, Object>(object, this->properties);
 
                 auto iter = this->table.begin();
                 if(iter == this->table.end())
@@ -296,7 +296,7 @@ namespace Tensile
 
                     iter++;
                 }
-                
+
                 //return std::make_tuple(bestMatch, bestDistance);
                 return bestMatch;
             }
