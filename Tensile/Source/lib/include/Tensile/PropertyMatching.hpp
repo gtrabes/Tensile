@@ -271,7 +271,7 @@ namespace Tensile
                 if(iter == this->table.end())
                     return bestMatch;
 
-                ReturnValue bestMatch = transform(iter->value);
+                bestMatch = transform(iter->value);
 
                 if(bestMatch)
                     bestDistance = distance(key, iter->key);
