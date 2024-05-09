@@ -246,13 +246,13 @@ namespace Tensile
                         {
                             bestKernelVector.clear();
                             //bestKernelVector.push_back(currentKernel);
-                            bestKernelVector.push_back(iter->value);
+                            bestKernelVector.push_back(iter);
                             //bestKernel = currentKernel;
                             //bestGranularityLoss = currentGranularityLoss;
                         }
                         else if (currentGranularityLoss == bestGranularityLoss){
                             //bestKernelVector.push_back(currentKernel);
-                            bestKernelVector.push_back(iter->value);
+                            bestKernelVector.push_back(iter);
                         }                        
                     }
                 }
