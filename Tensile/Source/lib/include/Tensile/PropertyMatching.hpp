@@ -232,7 +232,8 @@ namespace Tensile
                 // Create a vector to hold objects of type ReturnValue
                 //std::vector<ReturnValue> bestKernelVector;
                 std::vector<Entry> bestKernelVector;
-                std::vector<Entry>::iterator bestKerneliter;
+                //std::vector<Entry>::iterator bestKerneliter;
+                std::vector<Entry> bestKerneliter;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
