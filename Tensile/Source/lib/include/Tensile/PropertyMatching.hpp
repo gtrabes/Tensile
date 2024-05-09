@@ -232,6 +232,7 @@ namespace Tensile
                 // Create a vector to hold objects of type ReturnValue
                 //std::vector<ReturnValue> bestKernelVector;
                 std::vector<Entry> bestKernelVector;
+                std::vector<Entry>::iterator bestKerneliter;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
@@ -244,22 +245,23 @@ namespace Tensile
                                                                                                              
                         if (currentGranularityLoss > bestGranularityLoss)
                         {
-                            bestKernelVector.clear();
+                            //bestKernelVector.clear();
                             //bestKernelVector.push_back(currentKernel);
-                            bestKernelVector.push_back(iter);
+                            //bestKernelVector.push_back(iter);
+                            bestKerneliter = iter;
                             //bestKernel = currentKernel;
                             //bestGranularityLoss = currentGranularityLoss;
                         }
-                        else if (currentGranularityLoss == bestGranularityLoss){
+                        //else if (currentGranularityLoss == bestGranularityLoss){
                             //bestKernelVector.push_back(currentKernel);
-                            bestKernelVector.push_back(iter);
-                        }                        
+                        //    bestKernelVector.push_back(iter);
+                        //}                        
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
                 //bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
-                //bestKernel = bestKernelVector.back();
-                bestKernel = transform(iter->value);
+                //bestKerneliter = bestKernelVector.back();
+                bestKernel = transform(bestKerneliter->value);
                 return bestKernel;
             }
 
