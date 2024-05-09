@@ -230,7 +230,8 @@ namespace Tensile
                 double bestGranularityLoss = 0;
                 ReturnValue bestKernel = this->nullValue;
                 // Create a vector to hold objects of type ReturnValue
-                std::vector<ReturnValue> bestKernelVector;
+                //std::vector<ReturnValue> bestKernelVector;
+                std::vector<Entry> bestKernelVector;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
@@ -260,7 +261,8 @@ namespace Tensile
             }
 
             ReturnValue findLowerEuclidenDistance(Object const& object,
-                                                  std::vector<ReturnValue> bestKernelVector,
+                                                  //std::vector<ReturnValue> bestKernelVector,
+                                                  std::vector<Entry> bestKernelVector,  
                                                   Transform  transform) const
             {
                 double bestDistance = std::numeric_limits<double>::max();
