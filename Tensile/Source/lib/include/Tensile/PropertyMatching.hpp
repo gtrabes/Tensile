@@ -267,8 +267,8 @@ namespace Tensile
                 Key key = ProblemKey::keyForProblem<Key, Object>(object, this->properties);
                 ReturnValue bestMatch;
 
-                auto iter = this->table.begin();
-                if(iter == this->table.end())
+                auto iter = bestKernelVector.begin();
+                if(iter == bestKernelVector.end())
                     return bestMatch;
 
                 bestMatch = transform(iter->value);
@@ -278,7 +278,7 @@ namespace Tensile
 
                 iter++;
 
-                while(iter != this->table.end())
+                while(iter != bestKernelVector.end())
                 {
                     auto myDistance = distance(key, iter->key);
                     bool thisMatch  = false;
