@@ -234,7 +234,7 @@ namespace Tensile
                 std::vector<Entry> bestKernelVector;
                 std::vector<Entry>::iterator bestKerneliter;
 
-                for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
+                for (std::vector<Entry>::iterator iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
                     ReturnValue currentKernel = transform(iter->value);
 
