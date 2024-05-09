@@ -233,7 +233,7 @@ namespace Tensile
                 //std::vector<ReturnValue> bestKernelVector;
                 std::vector<Entry> bestKernelVector;
                 //std::vector<Entry>::iterator bestKerneliter;
-                std::vector<Entry> bestKerneliter;
+                Entry bestKerneliter;
 
                 for (auto iter = this->table.begin(); iter != this->table.end(); ++iter)
                 {
@@ -262,7 +262,7 @@ namespace Tensile
                 //get kernel that worked with GEMM with lowest euclidean distance
                 //bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
                 //bestKerneliter = bestKernelVector.back();
-                bestKernel = transform(bestKerneliter->value);
+                bestKernel = transform(bestKerneliter.value);
                 return bestKernel;
             }
 
