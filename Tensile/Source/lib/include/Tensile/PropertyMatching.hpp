@@ -279,21 +279,21 @@ namespace Tensile
                 if(iter == bestKernelVector.end())
                     return bestMatch;
 
-                bestMatch = transform(iter.value);
+                bestMatch = transform(iter->value);
 
                 if(bestMatch)
-                    bestDistance = distance(key, iter.key);
+                    bestDistance = distance(key, iter->key);
 
                 iter++;
 
                 while(iter != bestKernelVector.end())
                 {
-                    auto myDistance = distance(key, iter.key);
+                    auto myDistance = distance(key, iter->key);
                     bool thisMatch  = false;
 
                     if(myDistance < bestDistance)
                     {
-                        auto myMatch = transform(iter.value);
+                        auto myMatch = transform(iter->value);
 
                         if(myMatch)
                         {
