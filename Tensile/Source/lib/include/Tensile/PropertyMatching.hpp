@@ -246,23 +246,23 @@ namespace Tensile
                                                                                                              
                         if (currentGranularityLoss > bestGranularityLoss)
                         {
-                            //bestKernelVector.clear();
+                            bestKernelVector.clear();
                             //bestKernelVector.push_back(currentKernel);
-                            //bestKernelVector.push_back(iter);
-                            bestKerneliter = *iter;
+                            bestKernelVector.push_back(*iter);
+                            //bestKerneliter = *iter;
                             //bestKernel = currentKernel;
                             //bestGranularityLoss = currentGranularityLoss;
                         }
-                        //else if (currentGranularityLoss == bestGranularityLoss){
+                        else if (currentGranularityLoss == bestGranularityLoss){
                             //bestKernelVector.push_back(currentKernel);
-                        //    bestKernelVector.push_back(iter);
-                        //}                        
+                            bestKernelVector.push_back(*iter);
+                        }                        
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
-                //bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
+                bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
                 //bestKerneliter = bestKernelVector.back();
-                bestKernel = transform(bestKerneliter.value);
+                //bestKernel = transform(bestKerneliter.value);
                 return bestKernel;
             }
 
@@ -279,21 +279,21 @@ namespace Tensile
                 if(iter == bestKernelVector.end())
                     return bestMatch;
 
-                bestMatch = transform(iter->value);
+                bestMatch = transform(iter.value);
 
                 if(bestMatch)
-                    bestDistance = distance(key, iter->key);
+                    bestDistance = distance(key, iter.key);
 
                 iter++;
 
                 while(iter != bestKernelVector.end())
                 {
-                    auto myDistance = distance(key, iter->key);
+                    auto myDistance = distance(key, iter.key);
                     bool thisMatch  = false;
 
                     if(myDistance < bestDistance)
                     {
-                        auto myMatch = transform(iter->value);
+                        auto myMatch = transform(iter.value);
 
                         if(myMatch)
                         {
