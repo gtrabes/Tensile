@@ -260,9 +260,9 @@ namespace Tensile
                     }
                 }
                 //get kernel that worked with GEMM with lowest euclidean distance
-                //bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
+                bestKernel = findLowerEuclidenDistance(object, bestKernelVector, transform);
                 //bestKerneliter = bestKernelVector.back();
-                bestKernel = transform(bestKerneliter.value);
+                //bestKernel = transform(bestKerneliter.value);
                 return bestKernel;
             }
 
